@@ -1,31 +1,28 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './pages/Navbar';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./pages/Navbar";
+import Home from "./pages/Home";
+import { useAuth } from "./context/AuthProvider";
+import Loading from "./loader/Loading";
 
 const App = () => {
+
+  const { loading, data} = useAuth();
+  console.log("loading", loading);
+  console.log("data", data);
+
+  
   return (
-      // <h1 className=' bg-amber-500 text-shadow-indigo-600'> YouTube Clone  </h1>
-    <Router>
-    <div className="min-h-screen bg-gray-100">
+    <div >
+      {loading && <Loading />}
       <Navbar />
-      {/* <main className="container mx-auto py-8 px-4">
-        <Suspense fallback={<Loading />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </Suspense>
-      </main> 
-      <Footer /> */}
+      <Routes>
+        <Route path="/" exact element={<Home />} />
+        {/* <Route path="/search/:searchQuery" element={<Search />} /> */}
+        {/* <Route path="/video/:id" element={<PlayingVideo />} /> */}
+      </Routes>
     </div>
-  </Router>
-  )
-}
+  );
+};
 
-export default App
-
-// import { Provider } from "react-redux"
-// import store from "./redux/store"
-
-//     <Provider store={store}>
-      
-//     </Provider>
+export default App;
