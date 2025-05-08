@@ -44,13 +44,13 @@ app.use('/api/video', videoRoutes);
 app.use('/api/channel', channelRoutes);
 app.use('/api/comment', commentRoutes);
 
-// Static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'));
-  });
-}
+// // Static files in production
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static(path.join(__dirname, '../frontend/build')));
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'));
+//   });
+// }
 
 // Error Handling Middleware
 app.use(errorHandler);
