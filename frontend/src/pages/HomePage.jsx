@@ -1,39 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from '../api/axios';
 import VideoCard from '../components/video/VideoCard';
-import { getVideos } from '../services/videoService';
-import Spinner from '../components/common/Spinner';
+import FilterButtons from '../components/video/FilterButtons';
+import Loader from '../components/ui/Loader';
 
-/**
- * Home page displaying a grid of video cards
- */
 const HomePage = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [filter, setFilter] = useState('All');
 
-  // Fetch videos on component mount
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const data = await getVideos();
-        setVideos(data);
-      } catch (error) {
-        console.error('Error fetching videos:', error);
+        const response = await axios.get(`/video?filter=${filter}`);
+        setVideos(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to fetch videos');
       } finally {
         setLoading(false);
       }
     };
-
     fetchVideos();
-  }, []);
+  }, [filter]);
 
-  if (loading) {
-    return <Spinner />;
-  }
+  if (loading) return <Loader />;
+  if (error) return <div className="text-red-600 text-center p-4">{error}</div>;
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      {/* Videos grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <FilterButtons activeFilter={filter} onFilterChange={setFilter} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
         {videos.map(video => (
           <VideoCard key={video._id} video={video} />
         ))}
